@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jtlshopplugin>
+	<Name>Land Switcher</Name>
+	<Description>Land Switcher description</Description>
+	<Author>Surok</Author>
+	<URL>https://www.jtl-software.de</URL>
+	<XMLVersion>100</XMLVersion>
+	<ShopVersion>5.0.0</ShopVersion>
+	<Icon>preview.png</Icon>
+	<PluginID>landswitcher</PluginID>
+	<CreateDate>2024-07-08</CreateDate>
+	<Version>1.0.0</Version>
+	<Install>
+		<Adminmenu>
+			<Customlink sort="1">
+				<Name>Countries</Name>
+				<Filename>countries.php</Filename>
+			</Customlink>			
+		</Adminmenu>
+    </Install>
+</jtlshopplugin>
