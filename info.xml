@@ -13,8 +13,7 @@
 	<Install>
 		<Adminmenu>
 			<Customlink sort="1">
-				<Name>Countries</Name>
-				<Filename>countries.php</Filename>
+				<Name>Redirects</Name>
 			</Customlink>			
 		</Adminmenu>
     </Install>
