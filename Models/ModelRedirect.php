@@ -34,7 +34,6 @@ final class ModelRedirect extends DataModel
      * @inheritdoc
      */
 
-    public array $arCountries = [];
 
     public function getTableName(): string
     {
@@ -62,7 +61,10 @@ final class ModelRedirect extends DataModel
             $attributes['id'] = $id;
 
             $attributes['url'] = DataAttribute::create('url', 'varchar', null, false, false);
-            $attributes['country'] = DataAttribute::create('country', 'varchar', null, false, false);
+
+            $country = DataAttribute::create('country', 'varchar', null, false, false);
+            $country->getInputConfig()->setAllowedValues(self::getCountries(\Shop::Container()->getDB()));
+            $attributes['country'] = $country;
         }
 
         return $attributes;
@@ -74,26 +76,16 @@ final class ModelRedirect extends DataModel
         foreach(ModelCountry::loadAll($db, [], []) as $countryItem) $arCountries[$countryItem->CISO] = $countryItem->name;
         return $arCountries;
     }
-
+    
     public static function loadAll(DbInterface $db, $key, $value): Collection
     {
-        $result = parent::loadAll($db, $key, $value);
+        $result = parent::loadAll($db, [], []);
 
         $arCountries = self::getCountries($db);
         
         foreach($result as $rez) $rez->country = $arCountries[$rez->country];
-        //print_r($result);
-        //die();
-        return $result;
-    }
-
-    public static function load($attributes, DbInterface $db, $option = self::ON_NOTEXISTS_NEW)
-    {
-        $result = parent::load($attributes, $db, $option);
-        $arCountries = self::getCountries($db);
-        $result->arCountries = $arCountries;
         
         return $result;
     }
-       
+     
 }

@@ -6,10 +6,10 @@
     tabs=false
     select=true
     edit=true
-    search=true
+    search=false
     delete=true
-    disable=true
-    enable=true}
+    disable=false
+    enable=false}
 {elseif $step === 'detail'}
     {include file='./model_detail.tpl'
     item=$item

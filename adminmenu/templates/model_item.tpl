@@ -73,7 +73,7 @@
             <label class="col col-sm-4 col-form-label text-sm-right" for="{$name}{$postfix}">{__($name)}:</label>
             <div class="col-sm pl-sm-3 pr-sm-5 order-last order-sm-2">
                 <select class="custom-select" id="{$name}{$postfix}" name="{$inputName}">
-                    {foreach $item->arCountries as $k => $v}
+                    {foreach $inputConfig->getAllowedValues() as $k => $v}
                         <option value="{$k}"{if $item->getAttribValue($name) === $k} selected{/if}>{__($v)}</option>
                     {/foreach}
                 </select>

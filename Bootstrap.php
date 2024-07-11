@@ -45,6 +45,7 @@ class Bootstrap extends Bootstrapper
         $template = 'testtab.tpl';
         if ($tabName === 'Redirects') {
             //return print_r(ModelRedirect::loadAll($this->getDB(), [], []), true);
+            
             return $this->renderModelTab($menuID, $smarty);
         }
 
