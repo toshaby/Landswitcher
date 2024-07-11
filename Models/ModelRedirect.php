@@ -7,6 +7,8 @@ namespace Plugin\landswitcher\Models;
 use Exception;
 use JTL\Model\DataAttribute;
 use JTL\Model\DataModel;
+use JTL\DB\DbInterface;
+use Illuminate\Support\Collection;
 
 /**
  * Class ModelItem
@@ -31,6 +33,9 @@ final class ModelRedirect extends DataModel
     /**
      * @inheritdoc
      */
+
+    public array $arCountries = [];
+
     public function getTableName(): string
     {
         return 'landswitcher_redirects';
@@ -62,4 +67,33 @@ final class ModelRedirect extends DataModel
 
         return $attributes;
     }
+    
+    private static function getCountries(DbInterface $db):array
+    {
+        $arCountries = [];
+        foreach(ModelCountry::loadAll($db, [], []) as $countryItem) $arCountries[$countryItem->CISO] = $countryItem->name;
+        return $arCountries;
+    }
+
+    public static function loadAll(DbInterface $db, $key, $value): Collection
+    {
+        $result = parent::loadAll($db, $key, $value);
+
+        $arCountries = self::getCountries($db);
+        
+        foreach($result as $rez) $rez->country = $arCountries[$rez->country];
+        //print_r($result);
+        //die();
+        return $result;
+    }
+
+    public static function load($attributes, DbInterface $db, $option = self::ON_NOTEXISTS_NEW)
+    {
+        $result = parent::load($attributes, $db, $option);
+        $arCountries = self::getCountries($db);
+        $result->arCountries = $arCountries;
+        
+        return $result;
+    }
+       
 }

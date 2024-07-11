@@ -56,7 +56,7 @@ final class ModelCountry extends DataModel
             $cISO->getInputConfig()->setModifyable(false);
             $attributes['CISO'] = $cISO;
 
-            $eng = DataAttribute::create('cEnglisch', 'varchar', null, false, true);
+            $eng = DataAttribute::create('cEnglisch', 'varchar', null, false, false);
             $eng->getInputConfig()->setModifyable(false);
             $attributes['name'] = $eng;
         }

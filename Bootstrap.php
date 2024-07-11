@@ -22,6 +22,8 @@ use Laminas\Diactoros\ServerRequestFactory;
 use Plugin\jtl_test\Models\ModelFoo;
 use Plugin\jtl_test\Smarty\Registrator;
 
+use Plugin\landswitcher\Models\ModelRedirect;
+
 use function Functional\first;
 
 /**
@@ -42,6 +44,7 @@ class Bootstrap extends Bootstrapper
 
         $template = 'testtab.tpl';
         if ($tabName === 'Redirects') {
+            //return print_r(ModelRedirect::loadAll($this->getDB(), [], []), true);
             return $this->renderModelTab($menuID, $smarty);
         }
 

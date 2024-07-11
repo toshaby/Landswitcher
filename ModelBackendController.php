@@ -40,8 +40,9 @@ class ModelBackendController extends GenericModelController
         $this->modelClass    = ModelRedirect::class;
         $this->adminBaseFile = \ltrim($this->route, '/');
         $tab                 = Request::getVar('action', 'overview');
+        /*
         if ($tab === 'overview') {
-            $smarty->assign('models', ModelRedirect::loadAll($this->getDB(), [], []));
+            $smarty->assign('models', ModelRedirect::loadAll($this->getDB(), ['id'], [3]));
         } else {
             $smarty->assign('item', ModelRedirect::loadByAttributes(['id' => Request::getInt('id')], $this->getDB()))
                 ->assign('defaultTabbertab', $this->menuID);
@@ -49,7 +50,7 @@ class ModelBackendController extends GenericModelController
         $smarty->assign('step', $tab)
             ->assign('tab', $tab)
             ->assign('action', $this->plugin->getPaths()->getBackendURL());
-
+        */
         $response = $this->handle(__DIR__ . '/adminmenu/templates/models.tpl');
         if ($this->step === 'detail') {
             $smarty->assign('defaultTabbertab', $this->menuID);

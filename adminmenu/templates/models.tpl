@@ -11,7 +11,7 @@
     disable=true
     enable=true}
 {elseif $step === 'detail'}
-    {include file='tpl_inc/model_detail.tpl'
+    {include file='./model_detail.tpl'
     item=$item
     includeHeader=false
     tabs=false
