@@ -2,55 +2,30 @@
 
 declare(strict_types=1);
 
-namespace Plugin\landswitcher;
+namespace Plugin\Landswitcher;
 
-use JTL\Alert\Alert;
-use JTL\Catalog\Category\Kategorie;
-use JTL\Catalog\Product\Artikel;
-use JTL\Consent\Item;
-use JTL\Events\Dispatcher;
-use JTL\Events\Event;
-use JTL\Helpers\Form;
-use JTL\Helpers\Request;
-use JTL\Link\LinkInterface;
+
 use JTL\Plugin\Bootstrapper;
-use JTL\Router\Router;
 use JTL\Shop;
-use JTL\Shopsetting;
 use JTL\Smarty\JTLSmarty;
 use Laminas\Diactoros\ServerRequestFactory;
-use Plugin\jtl_test\Models\ModelFoo;
-use Plugin\jtl_test\Smarty\Registrator;
-
-use Plugin\landswitcher\Models\ModelRedirect;
-
 use function Functional\first;
 
 /**
  * Class Bootstrap
- * @package Plugin\jtl_test
+ * @package Plugin\Landswitcher
  */
 class Bootstrap extends Bootstrapper
 {
     public function renderAdminMenuTab(string $tabName, int $menuID, JTLSmarty $smarty): string
     {
         $plugin     = $this->getPlugin();
-        $backendURL = \method_exists($plugin->getPaths(), 'getBackendURL')
-            ? $plugin->getPaths()->getBackendURL()
-            : Shop::getAdminURL() . '/plugin.php?kPlugin=' . $plugin->getID();
-
         $smarty->assign('menuID', $menuID)
             ->assign('posted', null);
 
-        $template = 'testtab.tpl';
         if ($tabName === 'Redirects') {
-            //return print_r(ModelRedirect::loadAll($this->getDB(), [], []), true);
-            
             return $this->renderModelTab($menuID, $smarty);
         }
-
-        return $smarty->assign('backendURL', $backendURL)
-            ->fetch($this->getPlugin()->getPaths()->getAdminPath() . '/templates/' . $template);
     }
 
     private function renderModelTab(int $menuID, JTLSmarty $smarty): string

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Plugin\landswitcher\Migrations;
+namespace Plugin\Landswitcher\Migrations;
 
 use JTL\Plugin\Migration;
 use JTL\Update\IMigration;
 
 /**
  * Class Migration20240710082231
- * @package Plugin\landswitcher\Migrations
+ * @package Plugin\Landswitcher\Migrations
  */
 class Migration20240710082231 extends Migration implements IMigration
 {

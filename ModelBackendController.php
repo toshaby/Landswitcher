@@ -2,20 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Plugin\landswitcher;
+namespace Plugin\Landswitcher;
 
-use JTL\Helpers\Request;
 use JTL\Plugin\PluginInterface;
 use JTL\Router\Controller\Backend\GenericModelController;
 use JTL\Shop;
 use JTL\Smarty\JTLSmarty;
-use Plugin\landswitcher\Models\ModelRedirect;
+use Plugin\Landswitcher\Models\ModelRedirect;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class ModelBackendController
- * @package Plugin\jtl_test
+ * @package Plugin\Landswitcher
  */
 class ModelBackendController extends GenericModelController
 {
@@ -39,18 +38,7 @@ class ModelBackendController extends GenericModelController
         $this->smarty->assign('route', $this->route);
         $this->modelClass    = ModelRedirect::class;
         $this->adminBaseFile = \ltrim($this->route, '/');
-        $tab                 = Request::getVar('action', 'overview');
-        /*
-        if ($tab === 'overview') {
-            $smarty->assign('models', ModelRedirect::loadAll($this->getDB(), ['id'], [3]));
-        } else {
-            $smarty->assign('item', ModelRedirect::loadByAttributes(['id' => Request::getInt('id')], $this->getDB()))
-                ->assign('defaultTabbertab', $this->menuID);
-        }
-        $smarty->assign('step', $tab)
-            ->assign('tab', $tab)
-            ->assign('action', $this->plugin->getPaths()->getBackendURL());
-        */
+
         $response = $this->handle(__DIR__ . '/adminmenu/templates/models.tpl');
         if ($this->step === 'detail') {
             $smarty->assign('defaultTabbertab', $this->menuID);
