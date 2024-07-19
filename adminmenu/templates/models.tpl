@@ -13,7 +13,8 @@
 {elseif $step === 'detail'}
     {include file='./model_detail.tpl'
     item=$item
-    arexists=$arexists
+    arrCountries=$arrCountries
+    arrExistsRedirects=$arrExistsRedirects
     includeHeader=false
     tabs=false
     saveAndContinue=true

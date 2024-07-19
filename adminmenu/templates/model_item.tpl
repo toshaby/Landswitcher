@@ -73,8 +73,8 @@
             <label class="col col-sm-4 col-form-label text-sm-right" for="{$name}{$postfix}">{__($name)}:</label>
             <div class="col-sm pl-sm-3 pr-sm-5 order-last order-sm-2">
                 <select class="custom-select" id="{$name}{$postfix}" name="{$inputName}">
-                    {foreach $inputConfig->getAllowedValues() as $k => $v}
-                        <option value="{$k}"{if $item->getAttribValue($name) === $k} selected{elseif isset($arexists[$v]) } disabled{/if}>{__($v)}</option>
+                    {foreach $arrCountries as $k => $v}
+                        <option value="{$k}"{if $item->getAttribValue($name) === $k} selected{/if}{if isset($arrExistsRedirects[$k])} disabled{/if}>{__($v)}</option>
                     {/foreach}
                 </select>
                 <span id="specialLinkType-error" class="hidden-soft error"> <i title="{__('isDuplicateSpecialLink')}" class="fal fa-exclamation-triangle error"></i></span>

@@ -42,38 +42,17 @@ final class ModelRedirect extends DataModel
         static $attributes = null;
         if ($attributes === null) {
             $attributes = [];
-            
+
             $id = DataAttribute::create('id', 'int', null, false, true);
             $id->getInputConfig()->setModifyable(false);
             $id->getInputConfig()->setHidden(true);
             $attributes['id'] = $id;
-            
-            $attributes['url'] = DataAttribute::create('url', 'varchar', null, false, false);
 
-            $country = DataAttribute::create('country', 'varchar', null, false, false);
-            $country->getInputConfig()->setAllowedValues(self::getCountries(Shop::Container()->getDB()));
-            $attributes['country'] = $country;
+            $attributes['country'] = DataAttribute::create('country', 'varchar', null, false, false);
+
+            $attributes['url'] = DataAttribute::create('url', 'varchar', null, false, false);
         }
 
         return $attributes;
-    }
-
-    private static function getCountries(DbInterface $db): array
-    {
-        $arCountries = [];
-        foreach (ModelCountry::loadAll($db, [], []) as $countryItem)
-            $arCountries[$countryItem->CISO] = $countryItem->name;
-        return $arCountries;
-    }
-
-    public static function loadAll(DbInterface $db, $key, $value): Collection
-    {
-        $result = parent::loadAll($db, [], []);
-        
-        $arCountries = self::getCountries($db);
-        
-        foreach ($result as $rez) $rez->country = $arCountries[$rez->country];
-
-        return $result;
     }
 }

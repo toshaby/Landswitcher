@@ -9,6 +9,7 @@ use JTL\Router\Controller\Backend\GenericModelController;
 use JTL\Shop;
 use JTL\Smarty\JTLSmarty;
 use Plugin\Landswitcher\Models\ModelRedirect;
+use Plugin\Landswitcher\Models\ModelCountry;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -31,6 +32,8 @@ class RedirectBackendController extends GenericModelController
      * @var PluginInterface
      */
     public PluginInterface $plugin;
+
+    private string $countryClass = ModelCountry::class;
 
     /**
      * @inheritdoc
@@ -87,19 +90,37 @@ class RedirectBackendController extends GenericModelController
 
         $models     = $this->modelClass::loadAll($this->db, [], []);
 
-        $arExistsRedirects = [];
-        foreach ($models as $rez) $arExistsRedirects[$rez->country] = $rez->url;
+        //получаем массив стран
+        $arrCountries = [];
+        foreach ($this->countryClass::loadAll($this->db, [], []) as $rez)
+            $arrCountries[$rez->CISO] = $rez->name;
+
+        //Получаем список всех существующих редиректов, для обнаружения дубляжа
+        $arrExistsRedirects = [];
+        foreach ($models as $rez)
+            if ($itemID != $rez->id)
+                $arrExistsRedirects[$rez->country] = $rez->url;
 
         if ($save === true) {
             /* проверка входных данных */
             $errors = '';
 
             $url = $_POST['url'];
-            if(!preg_match('/^(https\:|http\:)?\/\/[a-z0-9_\-\.]+\//', $url)) $errors .= 'Урл не соответствует формату<br>';
-            if(in_array($url, $arExistsRedirects)) $errors .= 'Такой урл уже существует<br>';
+            if (!preg_match('/^(https|http)?\:\/\/[a-z0-9_\-\.]+\//', $url)) $errors .= 'Урл не соответствует формату<br>';
+            if (in_array($url, $arrExistsRedirects)) $errors .= 'Такой урл уже существует<br>';
+
+            $country = $_POST['country'];
+            if (isset($arrExistsRedirects[$country])) $errors .= 'Эта страна уже существует<br>';
 
             if ($errors) {
                 $_SESSION['modelErrorMsg'] = $errors;
+
+                //остаемся на странице редактирования
+                $this->step = 'detail';
+
+                //чтоб не пропали введенные данные
+                $this->item->url = htmlspecialchars($url);
+                if (isset($arrCountries[$country])) $this->item->country = $country;
             } else
                 return $this->save($itemID, $continue);
         }
@@ -126,17 +147,23 @@ class RedirectBackendController extends GenericModelController
         }
         $this->setMessages();
 
-       
 
 
-        $pagination = (new Pagination($template))
+
+        $pagination = (new Pagination('1'))
             ->setItemCount($models->count())
             ->assemble();
 
+        $models = $models->forPage($pagination->getPage() + 1, $pagination->getItemsPerPage());
+
+        //Подставляем название страны вместо ключа для вывода списком
+        foreach ($models as $rez) $rez->country = $arrCountries[$rez->country];
+
         return $this->smarty->assign('step', $this->step)
             ->assign('item', $this->item)
-            ->assign('models', $models->forPage($pagination->getPage() + 1, $pagination->getItemsPerPage()))
-            ->assign('arexists', $arExistsRedirects)
+            ->assign('models', $models)
+            ->assign('arrCountries', $arrCountries)
+            ->assign('arrExistsRedirects', $arrExistsRedirects)
             ->assign('action', $this->getAction())
             ->assign('pagination', $pagination)
             ->assign('childModel', $this->child)
