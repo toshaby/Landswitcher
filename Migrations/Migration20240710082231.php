@@ -24,6 +24,8 @@ class Migration20240710082231 extends Migration implements IMigration
               `url` VARCHAR(255) NOT NULL,
               `country` VARCHAR(5) NOT NULL,
               PRIMARY KEY (`id`),
+              UNIQUE KEY (`country`),
+              UNIQUE KEY (`url`),
               FOREIGN KEY (`country`) REFERENCES `tland` (`cISO`)
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci'
         );
